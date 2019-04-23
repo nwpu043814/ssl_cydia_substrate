@@ -11,8 +11,9 @@ public class Main {
     /**
      * substrate 初始化后的入口
      */
-    static void initialize() {
+    public static void initialize() {
         //Hook IMEI
+        Log.d("jw", "hook imei initialize...");
         MS.hookClassLoad("android.telephony.TelephonyManager", new MS.ClassLoadHook() {
             @SuppressWarnings({ "rawtypes", "unchecked" })
             public void classLoaded(Class<?> resources) {
@@ -28,18 +29,18 @@ public class Main {
                         public Object invoked(Object object, Object...args){
                             Object result = null;
                             try{
-                                Log.i("jw", "hook imei start...");
+                                Log.d("jw", "hook imei start...");
                                 result =  old.invoke(object, args);
-                                Log.i("jw", "hook imei before value:"+result);
+                                Log.d("jw", "hook imei before value:"+result);
                                 result = "fourbrother";
                             }catch(Throwable e){
-                                Log.i("jw", "hook imei err:"+Log.getStackTraceString(e));
+                                Log.d("jw", "hook imei err:"+Log.getStackTraceString(e));
                             }
                             return result;
                         }
                     }, old);
                 }else{
-                    Log.i("jw", "getDeviceId == null");
+                    Log.d("jw", "getDeviceId == null");
                 }
             }
         });
@@ -62,13 +63,13 @@ public class Main {
                                 int color = (Integer) old.invoke(resources, args);
                                 return color & ~0x0000ff00 | 0x00ff0000;
                             }catch(Throwable e){
-                                Log.i("jw", "hook color err:"+Log.getStackTraceString(e));
+                                Log.d("jw", "hook color err:"+Log.getStackTraceString(e));
                             }
                             return 0xFFFFFFFF;
                         }
                     }, old);
                 }else{
-                    Log.i("jw", "getColor == null");
+                    Log.d("jw", "getColor == null");
                 }
             }
         });

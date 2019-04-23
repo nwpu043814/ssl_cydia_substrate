@@ -22,6 +22,7 @@ public class MainActivity extends FragmentActivity implements ActivityCompat.OnR
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("jw", "mainactivity oncreate");
     }
 
     /**
