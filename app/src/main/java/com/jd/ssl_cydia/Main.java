@@ -2,7 +2,7 @@ package com.jd.ssl_cydia;
 
 import java.lang.reflect.Method;
 import java.util.Random;
-
+import com.alibaba.fastjson.JSON;
 import com.saurik.substrate.MS;
 
 import android.util.Log;
@@ -44,6 +44,38 @@ public class Main {
                                 Log.d(TAG, "hook imei err:"+Log.getStackTraceString(e));
                             }
                             return result;
+                        }
+                    }, old);
+                }else{
+                    Log.d(TAG, "getDeviceId == null");
+                }
+            }
+        });
+
+
+        MS.hookClassLoad("com.tencent.portfolio.stockdetails.pushstockdetail.level2http", new MS.ClassLoadHook() {
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            public void classLoaded(Class<?> resources) {
+                Method getDeviceId;
+                try {
+                    getDeviceId = resources.getMethod("a");
+                    getDeviceId.setAccessible(true);
+                } catch (NoSuchMethodException e) {
+                    getDeviceId = null;
+                }
+                if (getDeviceId != null) {
+                    final MS.MethodPointer old = new MS.MethodPointer();
+                    MS.hookMethod(resources, getDeviceId, new MS.MethodHook() {
+                        public Object invoked(Object object, Object...args){
+                            Object result = null;
+                            try{
+                                old.invoke(object, args);
+                                Log.d(TAG,"A:" +JSON.toJSONString(object));
+                                Log.d(TAG,"B:" +JSON.toJSONString(args));
+                            }catch(Throwable e){
+                                Log.d(TAG, "hook a err:"+Log.getStackTraceString(e));
+                            }
+                            return null;
                         }
                     }, old);
                 }else{
