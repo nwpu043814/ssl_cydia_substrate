@@ -53,37 +53,6 @@ public class Main {
         });
 
 
-        MS.hookClassLoad("com.tencent.portfolio.stockdetails.pushstockdetail.level2http", new MS.ClassLoadHook() {
-            @SuppressWarnings({ "rawtypes", "unchecked" })
-            public void classLoaded(Class<?> resources) {
-                Method getDeviceId;
-                try {
-                    getDeviceId = resources.getMethod("a");
-                    getDeviceId.setAccessible(true);
-                } catch (NoSuchMethodException e) {
-                    getDeviceId = null;
-                }
-                if (getDeviceId != null) {
-                    final MS.MethodPointer old = new MS.MethodPointer();
-                    MS.hookMethod(resources, getDeviceId, new MS.MethodHook() {
-                        public Object invoked(Object object, Object...args){
-                            Object result = null;
-                            try{
-                                old.invoke(object, args);
-                                Log.d(TAG,"A:" +JSON.toJSONString(object));
-                                Log.d(TAG,"B:" +JSON.toJSONString(args));
-                            }catch(Throwable e){
-                                Log.d(TAG, "hook a err:"+Log.getStackTraceString(e));
-                            }
-                            return null;
-                        }
-                    }, old);
-                }else{
-                    Log.d(TAG, "getDeviceId == null");
-                }
-            }
-        });
-
         //Hook System Color
         MS.hookClassLoad("android.content.res.Resources", new MS.ClassLoadHook() {
             @SuppressWarnings({ "unchecked", "rawtypes" })
